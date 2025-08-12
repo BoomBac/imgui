@@ -468,10 +468,12 @@ static void ImGui_ImplDX12_CreateFontsTexture()
 
         ID3D12CommandAllocator* cmdAlloc = nullptr;
         hr = bd->pd3dDevice->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&cmdAlloc));
+        cmdAlloc->SetName(L"ImGui_ImplDX12_CommandAllocator");
         IM_ASSERT(SUCCEEDED(hr));
 
         ID3D12GraphicsCommandList* cmdList = nullptr;
         hr = bd->pd3dDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, cmdAlloc, nullptr, IID_PPV_ARGS(&cmdList));
+        cmdList->SetName(L"ImGui_ImplDX12_CommandList");
         IM_ASSERT(SUCCEEDED(hr));
 
         cmdList->CopyTextureRegion(&dstLocation, 0, 0, 0, &srcLocation, nullptr);
@@ -872,6 +874,7 @@ static void ImGui_ImplDX12_CreateWindow(ImGuiViewport* viewport)
     for (UINT i = 0; i < bd->numFramesInFlight; ++i)
     {
         res = bd->pd3dDevice->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&vd->FrameCtx[i].CommandAllocator));
+        vd->FrameCtx[i].CommandAllocator->SetName(L"ImGui_ImplDX12_ViewportCommandAllocator");
         IM_ASSERT(res == S_OK);
     }
 
